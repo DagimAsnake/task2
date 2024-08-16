@@ -70,13 +70,21 @@ const SectionFour = () => {
                 slidesPerView: 2,
               },
             }}
-            navigation={{
-              prevEl: prevRef.current,
-              nextEl: nextRef.current,
-            }}
+            navigation={
+              {
+                prevEl: prevRef.current,
+                nextEl: nextRef.current,
+              } as any
+            } // Type assertion to bypass type error
             onBeforeInit={(swiper) => {
-              swiper.params.navigation.prevEl = prevRef.current;
-              swiper.params.navigation.nextEl = nextRef.current;
+              const navigation = swiper.params.navigation as {
+                prevEl?: HTMLElement | null;
+                nextEl?: HTMLElement | null;
+              };
+              if (navigation) {
+                navigation.prevEl = prevRef.current || undefined;
+                navigation.nextEl = nextRef.current || undefined;
+              }
             }}
           >
             {testimonials.map((testimonial) => (
